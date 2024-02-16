@@ -1,0 +1,61 @@
+using Plots
+using DifferentialEquations
+
+# Константы из задачи
+const k = 6.5
+const v = 2.6
+#Константа для уранвения
+const ur = 2.4
+
+# Начальное условие
+const r0_1= k/(v + 1)
+const r0_2 = k/(v - 1)
+
+# Интервал
+const T_1 = (0, 2*pi)
+const T_2 = (-pi, pi)
+
+#Функция для диф.уранвения
+function F(u, p, t)
+    return u / ur
+end
+
+# 1 случай
+#Решение диф.уранвения
+problem = ODEProblem(F, r0_1, T_1)
+result = solve(problem, abstol=1e-8, reltol=1e-8)
+
+dxR = rand(1:size(result.t)[1])
+rAngles = [result.t[dxR] for i in 1:size(result.t)[1]]
+
+#Параметры для изображения
+plt = plot(proj=:polar, aspect_ratio=:equal, dpi = 1000, legend=true, bg=:white)
+
+plot!(plt, xlabel="theta", ylabel="r(t)", title="Задача о погоне. 1 случай", legend=:outerbottom)
+plot!(plt, [rAngles[1], rAngles[2]], [0.0, result.u[size(result.u)[1]]], label="Путь лодки", color=:red, lw=1)
+scatter!(plt, rAngles, result.u, label="", mc=:red, ms=0.0005)
+plot!(plt, result.t, result.u, xlabel="theta", ylabel="r(t)", label="Путь катера", color=:green, lw=1)
+scatter!(plt, result.t, result.u, label="", mc=:green, ms=0.0005)
+
+#Сохранение изображения
+savefig(plt, "lab02_01.png")
+
+# 2 случай
+#Решение диф.уранвения
+problem = ODEProblem(F, r0_2 , T_2)
+result = solve(problem, abstol=1e-8, reltol=1e-8)
+
+dxR = rand(1:size(result.t)[1])
+rAngles = [result.t[dxR] for i in 1:size(result.t)[1]]
+
+#Параметры для изображения
+plt1 = plot(proj=:polar, aspect_ratio=:equal, dpi = 1000, legend=true, bg=:white)
+
+plot!(plt1, xlabel="theta", ylabel="r(t)", title="Задача о погоне. 2 случай", legend=:outerbottom)
+plot!(plt1, [rAngles[1], rAngles[2]], [0.0, result.u[size(result.u)[1]]], label="Путь лодки", color=:red, lw=1)
+scatter!(plt1, rAngles, result.u, label="", mc=:red, ms=0.0005)
+plot!(plt1, result.t, result.u, xlabel="theta", ylabel="r(t)", label="Путь катера", color=:green, lw=1)
+scatter!(plt1, result.t, result.u, label="", mc=:green, ms=0.0005)
+
+#Сохранение изображения
+savefig(plt1, "lab02_02.png")
