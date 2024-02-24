@@ -1,0 +1,39 @@
+using Plots
+using DifferentialEquations
+
+const army = Float64[19300, 39000]  
+const t1 = [0.0, 2.0]  
+const t2 = [0.0, 0.0005]  
+
+function regular_war(du, u, p, t)
+    du[1] = -0.46*u[1] - 0.7*u[2] + sin(t*0.5)   
+    du[2] = -0.82*u[1] - 0.5*u[2] + cos(t*1.5)  
+end
+
+function regular_part(du, u, p, t)
+    du[1] = -0.38*u[1] - 0.73*u[2] + sin(t*2) + 1  
+    du[2] = -0.5*u[1]*u[2] - 0.28*u[2] + cos(t*2)  
+end
+
+equat1 = ODEProblem(regular_war, army, t1)
+solv1 = solve(equat1, dtmax=0.01)  
+
+equat2 = ODEProblem(regular_part, army, t2)  
+solv2 = solve(equat2, dtmax=0.01) 
+
+U1_1 = [u[1] for u in solv1.u]
+U1_2 = [u[2] for u in solv1.u]
+U2_1 = [u[1] for u in solv2.u]
+U2_2 = [u[2] for u in solv2.u]
+
+plot1 = plot(dpi = 1200, legend= true, bg =:white, xlabel="Время", ylabel="Численность войск", title="Боевые действия - модель 1")
+plot!(plot1, solv1.t, U1_1, label="Численность армии X", color =:red)
+plot!(plot1, solv1.t, U1_2, label="Численность армии Y", color =:blue)
+savefig(plot1, "lab03_1.png")
+
+plot2 = plot(dpi = 1200, legend= true, bg =:white, xlabel="Время", ylabel="Численность войск", title="Боевые действия - модель 2")
+plot!(plot2, solv2.t, U2_1, label="Численность армии X", color =:red)
+plot!(plot2, solv2.t, U2_2, label="Численность армии Y", color =:blue)
+savefig(plot2, "lab03_2.png")
+
+
