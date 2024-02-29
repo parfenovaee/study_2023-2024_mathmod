@@ -1,0 +1,86 @@
+# 1 случай
+# Eq: x'' + 1.5x = 0
+
+using DifferentialEquations
+using Plots
+
+w = 1.5
+
+function without_intervention(du, u, p, t)
+    du[1] = u[2]
+    du[2] = -w*u[1]
+end
+
+u0 = [0.0, 0.0]
+timee = (0.0, 60.0)
+
+prob = ODEProblem(without_intervention, u0, timee)
+sol = solve(prob, dtmax = 0.05)
+
+
+plot(sol)
+savefig("lab4_1_jl.png")
+
+
+plot(sol, vars=(2,1))
+savefig("lab4_1_jl_pp.png")
+
+
+
+
+# 2 случай
+# Eq: x'' + x' + 10x = 0
+
+using DifferentialEquations
+using Plots
+
+w = 10
+g = 1
+
+function with_one_intervention(du, u, p, t)
+    du[1] = u[2]
+    du[2] = -g*du[1]- w*u[1]
+end
+
+u0 = [0.0, 0.0]
+timee = (0.0, 60.0)
+
+prob = ODEProblem(with_one_intervention, u0, timee)
+sol = solve(prob, dtmax = 0.05)
+
+plot(sol)
+savefig("lab4_2_jl.png")
+
+plot(sol, vars=(2,1))
+savefig("lab4_2_jl_pp.png")
+
+
+
+
+
+# 3 случай
+# Eq: x'' + x' + 11x = 2cos(t)
+
+using DifferentialEquations
+using Plots
+
+w = 11
+g = 1
+
+function with_intervention(du, u, p, t)
+    du[1] = u[2]
+    du[2] = -g*du[1]- w*u[1] + 2*cos(t)
+end
+
+u0 = [0.0, 0.0]
+timee = (0.0, 60.0)
+
+prob = ODEProblem(with_intervention, u0, timee)
+sol = solve(prob, dtmax = 0.05)
+
+plot(sol)
+savefig("lab4_3_jl.png")
+
+plot(sol, vars=(2,1))
+savefig("lab4_3_jl_pp.png")
+
