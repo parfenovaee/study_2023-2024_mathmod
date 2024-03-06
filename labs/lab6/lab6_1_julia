@@ -1,0 +1,35 @@
+using Plots
+using DifferentialEquations
+
+#N = 14000
+I0 = 114.0
+R0 = 14.0
+S0 = 13872.0
+
+a = 0.7
+b = 0.15
+
+function one_ep(du, u, p, t)
+    du[1] = 0
+    du[2] = -b*u[2]
+    du[3] = b*u[2]
+end
+
+time = (0.0, 200.0)
+start = [S0,I0,R0]
+
+equat = ODEProblem(one_ep, start, time)
+solv = solve(equat, dtmax=0.01)  
+
+S = [u[1] for u in solv.u]
+I = [u[2] for u in solv.u]
+R = [u[3] for u in solv.u]
+
+plot1 = plot(dpi = 300, legend = :topright, bg =:white, title = "График изменения численности при I <= I*")
+plot!(plot1, solv.t, S, label="Группа S", color =:blue)
+plot!(plot1, solv.t, I, label="Группа I", color =:red)
+plot!(plot1, solv.t, R, label="Группа R", color =:green)
+
+savefig(plot1, "lab06_1.png")
+
+
