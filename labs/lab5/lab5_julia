@@ -1,0 +1,60 @@
+using Plots
+using DifferentialEquations
+
+a = 0.19 
+b = 0.048
+c = 0.39
+d = 0.036
+
+x0 = 13.0
+y0 = 18.0
+
+x0_1 = c / d
+y0_1 = a / b
+
+start = [x0, y0]
+startt = [x0_1, y0_1]
+
+timee = [0.0, 60.0]
+
+function predator_prey(du, u, p, t)
+    du[1] = -a*u[1] + b*u[1]*u[2]
+    du[2] = c*u[2] - d*u[1]*u[2] 
+end
+
+equat1 = ODEProblem(predator_prey, start, timee)
+solv1 = solve(equat1, dtmax=0.01)  
+
+U1_1 = [u[1] for u in solv1.u]
+U2_1 = [u[2] for u in solv1.u]
+
+equat2 = ODEProblem(predator_prey, startt, timee)
+solv2 = solve(equat2, dtmax=0.01)
+
+U1_2 = [u[1] for u in solv2.u]
+U2_2 = [u[2] for u in solv2.u]
+
+plot1 = plot(dpi = 300, legend = false, bg =:white, title="График зависимости: хищники, жертвы")
+plot!(plot1, U1_1, U2_1, color=:red)
+
+savefig(plot1, "lab05_1.png")
+
+plot2 = plot(dpi = 300, legend= true, bg =:white, title="График изменения: хищники, жертвы")
+plot!(plot2, solv1.t, U1_1, label="Численность жертв", color =:green)
+plot!(plot2, solv1.t, U2_1, label="Численность хищников", color =:red)
+
+savefig(plot2, "lab05_2.png")
+
+plot3 = plot(dpi = 300, legend= true, bg =:white, title="График стационарного состояния")
+plot!(plot3, solv2.t, U1_2, label="Численность жертв", color =:green)
+plot!(plot3, solv2.t, U2_2, label="Численность хищников", color =:red)
+
+
+savefig(plot3, "lab05_3.png")
+
+
+
+
+
+
+
