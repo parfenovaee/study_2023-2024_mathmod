@@ -45,7 +45,7 @@ header-includes:
 :::
 ::: {.column width="30%"}
 
-![](./image/основная%20gif.gif)
+![]()
 
 :::
 ::::::::::::::
