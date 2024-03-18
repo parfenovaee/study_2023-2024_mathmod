@@ -33,6 +33,17 @@ n_1 = [u[1] for u in solv1.u]
 n_2 = [u[1] for u in solv2.u]
 n_3 = [u[1] for u in solv3.u]
 
+max = 0;
+max_t = 0;
+max_n = 0;
+for (i, t) in enumerate(solv2.t)
+    if solv2(t, Val{1})[1] > max
+        global max = solv2(t, Val{1})[1]
+        global max_t = t
+        global max_n = n_2[i]
+    end
+end
+
 plot1 = plot(dpi = 300, legend= false, bg =:white, title="График распространения рекламы в 1 случае")
 plot!(plot1, solv1.t, n_1, color =:green)
 
@@ -40,6 +51,7 @@ savefig(plot1, "lab07_1.png")
 
 plot2 = plot(dpi = 300, legend= false, bg =:white, title="График распространения рекламы во 2 случае")
 plot!(plot2, solv2.t, n_2, color =:green)
+plot!(plot2, [max_t], [max_n], seriestype = :scatter, color = :green)
 
 savefig(plot2, "lab07_2.png")
 
