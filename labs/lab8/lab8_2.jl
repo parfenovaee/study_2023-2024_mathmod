@@ -31,7 +31,7 @@ solv = solve(equat, dtmax=0.01)
 M_1 = [u[1] for u in solv.u]
 M_2 = [u[2] for u in solv.u]
 
-plot1 = plot(dpi = 600, legend =:topleft, bg =:white, title="Изменение оборотных средств во 2 случае")
+plot1 = plot(dpi = 600, legend =:bottomright, bg =:white, title="Изменение оборотных средств во 2 случае")
 plot!(plot1, solv.t, M_1, label="Изменения объемов продаж 1 фирмы", color =:green)
 plot!(plot1, solv.t, M_2, label="Изменения объемов продаж 2 фирмы", color =:blue)
 
